@@ -6,10 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum Diskusi - Ekonomi Lingkungan</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        main {
+            padding: 20px;
+        }
+        .forum-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .thread {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .thread h3 {
+            margin: 0;
+        }
+        .comments {
+            margin-top: 10px;
+        }
+        .comment {
+            padding: 5px 0;
+            border-top: 1px solid #ddd;
+        }
+        .new-thread, .new-comment {
+            margin: 20px 0;
+        }
+        .new-thread input, .new-comment input, .new-comment textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .new-thread button, .new-comment button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .new-thread button:hover, .new-comment button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Forum Diskusi</h1>
+        <h1>Forum Diskusi Ekonomi Lingkungan</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Beranda</a></li>
@@ -23,15 +96,63 @@
         </nav>
     </header>
     <main>
-        <section>
-            <h2>Diskusi Kelas</h2>
-            <p>Gunakan forum ini untuk bertanya, berdiskusi, dan berbagi pemahaman terkait topik kuliah.</p>
-            <textarea rows="5" cols="50" placeholder="Tuliskan pertanyaan atau komentar Anda..."></textarea>
-            <button type="button">Kirim</button>
-        </section>
+        <div class="forum-container">
+            <div class="new-thread">
+                <h2>Buat Thread Baru</h2>
+                <input type="text" id="threadTitle" placeholder="Judul Thread" required>
+                <button onclick="createThread()">Buat Thread</button>
+            </div>
+            <div id="threadsContainer"></div>
+        </div>
     </main>
     <footer>
         <p>&copy; 2024 Universitas Sahid. Semua hak dilindungi.</p>
     </footer>
+
+    <script>
+        // Function to create a new thread
+        function createThread() {
+            const threadTitle = document.getElementById('threadTitle').value.trim();
+            if (threadTitle === '') {
+                alert('Judul thread tidak boleh kosong.');
+                return;
+            }
+
+            const threadContainer = document.createElement('div');
+            threadContainer.className = 'thread';
+            threadContainer.innerHTML = `
+                <h3>${threadTitle}</h3>
+                <div class="comments"></div>
+                <div class="new-comment">
+                    <input type="text" placeholder="Nama Anda" class="commenter-name" required>
+                    <textarea rows="3" placeholder="Tulis komentar Anda..." class="comment-text" required></textarea>
+                    <button onclick="addComment(this)">Kirim Komentar</button>
+                </div>
+            `;
+
+            document.getElementById('threadsContainer').prepend(threadContainer);
+            document.getElementById('threadTitle').value = '';
+        }
+
+        // Function to add a comment to a thread
+        function addComment(button) {
+            const commenterName = button.parentElement.querySelector('.commenter-name').value.trim();
+            const commentText = button.parentElement.querySelector('.comment-text').value.trim();
+
+            if (commenterName === '' || commentText === '') {
+                alert('Nama dan komentar tidak boleh kosong.');
+                return;
+            }
+
+            const commentContainer = button.parentElement.previousElementSibling;
+            const newComment = document.createElement('div');
+            newComment.className = 'comment';
+            newComment.innerHTML = `<strong>${commenterName}:</strong> ${commentText}`;
+
+            commentContainer.appendChild(newComment);
+            button.parentElement.querySelector('.commenter-name').value = '';
+            button.parentElement.querySelector('.comment-text').value = '';
+        }
+    </script>
 </body>
 </html>
