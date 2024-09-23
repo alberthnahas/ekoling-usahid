@@ -99,7 +99,7 @@
 
         <button id="showTutorial" onclick="toggleTutorial()">Show Tutorial</button>
 
-        <div id="tutorial" style="display: none;">
+        <div id="tutorial" style="display:none;">
             <h2>How to Play</h2>
             <ol>
                 <li><strong>Objective:</strong> Manage your country's emissions while balancing economic growth and environmental responsibility.</li>
@@ -118,16 +118,16 @@
                 <li><strong>Monitoring:</strong> Keep an eye on the emissions chart to track your progress and compare with other countries.</li>
             </ol>
             <button onclick="toggleTutorial()">Start Playing</button>
-        </div>
+       </div>
 
-        <div class="game-container">
-            <div class="left-panel">
-                <div id="market" class="market">
-                    <h3>Global Carbon Market</h3>
-                    <p>Current Price: $<span id="marketPrice">10</span> per credit</p>
-                    <button onclick="triggerEvent()">Trigger Random Event</button>
-                    <p>Last Event: <span id="lastEvent">None</span></p>
-                </div>
+       <div class="game-container">
+           <div class="left-panel">
+               <div id="market" class="market">
+                   <h3>Global Carbon Market</h3>
+                   <p>Current Price: $<span id="marketPrice">10</span> per credit</p>
+                   <button onclick="triggerEvent()">Trigger Random Event</button>
+                   <p>Last Event: <span id="lastEvent">None</span></p>
+               </div>
 
                 <div id="usa" class="country-dashboard">
                     <div class="country-info">
@@ -212,19 +212,20 @@
                         <button onclick="investTech('norway')">Invest</button>
                     </div>
                 </div>
-            </div>
+           </div>
 
-            <div class="right-panel">
-                <div id="chart"></div>
-            </div>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Alberth Nahas. All Rights Reserved.</p>
-    </footer>
+           <div class="right-panel">
+               <div id="chart"></div>
+           </div>
+       </div>
+   </main>
 
-    <script>
-        let marketPrice = 10;
+   <footer>
+       <p>&copy; 2024 Alberth Nahas. All Rights Reserved.</p>
+   </footer>
+
+   <script>
+       let marketPrice = 10;
         let countries = {
             usa: { cash: 1000, emissions: 500, credits: 20, history: [] },
             china: { cash: 1200, emissions: 700, credits: 15, history: [] },
@@ -358,6 +359,7 @@
         updateDisplay();
         // Hide the tutorial initially
         document.getElementById('tutorial').style.display = 'none';
-    </script>
+   </script>
+
 </body>
 </html>
