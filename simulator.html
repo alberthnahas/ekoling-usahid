@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Trading Simulator - Ekonomi Lingkungan</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        .game-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .left-panel {
+            width: 60%;
+        }
+        .right-panel {
+            width: 38%;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+        }
+        .market, .country-dashboard {
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .market {
+            background-color: #e8f6e8;
+        }
+        .country-dashboard {
+            background-color: #e8f4f8;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .country-info {
+            flex: 1;
+            min-width: 200px;
+        }
+        .country-actions {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        .flag {
+            width: 30px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        #chart {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+        }
+        #tutorial {
+            background-color: #e8f8f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        #tutorial button, #showTutorial {
+            background-color: #2ecc71;
+        }
+        #tutorial button:hover, #showTutorial:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ekonomi Lingkungan</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="silabus.html">Silabus</a></li>
+                <li><a href="kuliah.html">Kuliah</a></li>
+                <li><a href="tugas.html">Tugas</a></li>
+                <li><a href="bacaan.html">Referensi</a></li>
+                <li><a href="kontak.html">Kontak</a></li>
+                <li><a href="simulator.html">Carbon Trading Simulator</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Carbon Trading Simulator: Global Edition</h2>
+
+        <button id="showTutorial" onclick="toggleTutorial()">Show Tutorial</button>
+
+        <div id="tutorial">
+            <div id="tutorial">
+                <h2>How to Play</h2>
+                <ol>
+                    <li><strong>Objective:</strong> Manage your country's emissions while balancing economic growth and environmental responsibility.</li>
+                    <li><strong>Carbon Credits:</strong> Each credit represents the right to emit one ton of carbon dioxide.</li>
+                    <li><strong>Actions:</strong>
+                        <ul>
+                            <li><strong>Buy Credits:</strong> Purchase carbon credits from the market. This increases your emission allowance but costs money.</li>
+                            <li><strong>Sell Credits:</strong> Sell excess credits to generate income.</li>
+                            <li><strong>Invest in Technology:</strong> Reduce emissions by investing in clean technology. This costs money but lowers your emissions.</li>
+                            <li><strong>Protect Forests/Resources:</strong> Some countries can protect natural resources, generating credits and reducing emissions.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Market Dynamics:</strong> The price of carbon credits changes based on supply and demand. Buying increases the price, selling decreases it.</li>
+                    <li><strong>Random Events:</strong> Click "Trigger Random Event" to simulate global occurrences that affect the market and countries.</li>
+                    <li><strong>Strategy:</strong> Each country has unique characteristics. Adapt your strategy based on your country's strengths and weaknesses.</li>
+                    <li><strong>Monitoring:</strong> Keep an eye on the emissions chart to track your progress and compare with other countries.</li>
+                </ol>
+                <button onclick="toggleTutorial()">Start Playing</button>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div class="left-panel">
+                <div id="market" class="market">
+                    <div id="market" class="market">
+                        <h2>Global Carbon Market</h2>
+                        <p>Current Price: $<span id="marketPrice">10</span> per credit</p>
+                        <button onclick="triggerEvent()">Trigger Random Event</button>
+                        <p>Last Event: <span id="lastEvent">None</span></p>
+                    </div>
+                </div>
+
+                <div id="usa" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/us.png') no-repeat center/cover;"></span>USA</h2>
+                        <p>Cash: $<span id="usaCash">1000</span></p>
+                        <p>Emissions: <span id="usaEmissions">500</span> tons</p>
+                        <p>Credits: <span id="usaCredits">20</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('usa')">Buy Credits</button>
+                        <button onclick="sellCredits('usa')">Sell Credits</button>
+                        <button onclick="investTech('usa')">Invest in Technology</button>
+                    </div>
+                </div>
+    
+                <div id="china" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/cn.png') no-repeat center/cover;"></span>China</h2>
+                        <p>Cash: $<span id="chinaCash">1200</span></p>
+                        <p>Emissions: <span id="chinaEmissions">700</span> tons</p>
+                        <p>Credits: <span id="chinaCredits">15</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('china')">Buy Credits</button>
+                        <button onclick="sellCredits('china')">Sell Credits</button>
+                        <button onclick="investTech('china')">Invest in Technology</button>
+                    </div>
+                </div>
+    
+                <div id="india" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/in.png') no-repeat center/cover;"></span>India</h2>
+                        <p>Cash: $<span id="indiaCash">600</span></p>
+                        <p>Emissions: <span id="indiaEmissions">400</span> tons</p>
+                        <p>Credits: <span id="indiaCredits">10</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('india')">Buy Credits</button>
+                        <button onclick="sellCredits('india')">Sell Credits</button>
+                        <button onclick="investTech('india')">Invest in Technology</button>
+                    </div>
+                </div>
+    
+                <div id="germany" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/de.png') no-repeat center/cover;"></span>Germany</h2>
+                        <p>Cash: $<span id="germanyCash">800</span></p>
+                        <p>Emissions: <span id="germanyEmissions">300</span> tons</p>
+                        <p>Credits: <span id="germanyCredits">25</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('germany')">Buy Credits</button>
+                        <button onclick="sellCredits('germany')">Sell Credits</button>
+                        <button onclick="investTech('germany')">Invest in Technology</button>
+                    </div>
+                </div>
+    
+                <div id="brazil" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/br.png') no-repeat center/cover;"></span>Brazil</h2>
+                        <p>Cash: $<span id="brazilCash">500</span></p>
+                        <p>Emissions: <span id="brazilEmissions">250</span> tons</p>
+                        <p>Credits: <span id="brazilCredits">30</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('brazil')">Buy Credits</button>
+                        <button onclick="sellCredits('brazil')">Sell Credits</button>
+                        <button onclick="protectForests('brazil')">Protect Forests</button>
+                    </div>
+                </div>
+    
+                <div id="indonesia" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/id.png') no-repeat center/cover;"></span>Indonesia</h2>
+                        <p>Cash: $<span id="indonesiaCash">400</span></p>
+                        <p>Emissions: <span id="indonesiaEmissions">200</span> tons</p>
+                        <p>Credits: <span id="indonesiaCredits">20</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('indonesia')">Buy Credits</button>
+                        <button onclick="sellCredits('indonesia')">Sell Credits</button>
+                        <button onclick="protectResources('indonesia')">Protect Resources</button>
+                    </div>
+                </div>
+    
+                <div id="norway" class="country-dashboard">
+                    <div class="country-info">
+                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/no.png') no-repeat center/cover;"></span>Norway</h2>
+                        <p>Cash: $<span id="norwayCash">900</span></p>
+                        <p>Emissions: <span id="norwayEmissions">100</span> tons</p>
+                        <p>Credits: <span id="norwayCredits">35</span></p>
+                    </div>
+                    <div class="country-actions">
+                        <button onclick="buyCredits('norway')">Buy Credits</button>
+                        <button onclick="sellCredits('norway')">Sell Credits</button>
+                        <button onclick="investTech('norway')">Invest in Technology</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div id="chart"></div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Alberth Nahas. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let marketPrice = 10;
+        let countries = {
+            usa: { cash: 1000, emissions: 500, credits: 20, history: [] },
+            china: { cash: 1200, emissions: 700, credits: 15, history: [] },
+            india: { cash: 600, emissions: 400, credits: 10, history: [] },
+            germany: { cash: 800, emissions: 300, credits: 25, history: [] },
+            brazil: { cash: 500, emissions: 250, credits: 30, history: [] },
+            indonesia: { cash: 400, emissions: 200, credits: 20, history: [] },
+            norway: { cash: 900, emissions: 100, credits: 35, history: [] }
+        };
+
+        function updateDisplay() {
+            document.getElementById('marketPrice').innerText = marketPrice;
+            for (let country in countries) {
+                document.getElementById(`${country}Cash`).innerText = countries[country].cash;
+                document.getElementById(`${country}Emissions`).innerText = countries[country].emissions;
+                document.getElementById(`${country}Credits`).innerText = countries[country].credits;
+                countries[country].history.push({
+                    cash: countries[country].cash,
+                    emissions: countries[country].emissions,
+                    credits: countries[country].credits
+                });
+            }
+            updateChart();
+        }
+
+        function buyCredits(country) {
+            if (countries[country].cash >= marketPrice) {
+                countries[country].cash -= marketPrice;
+                countries[country].credits += 1;
+                marketPrice += 1; // Price rises with demand
+                updateDisplay();
+            } else {
+                alert(`${country} doesn't have enough cash!`);
+            }
+        }
+
+        function sellCredits(country) {
+            if (countries[country].credits > 0) {
+                countries[country].credits -= 1;
+                countries[country].cash += marketPrice;
+                marketPrice -= 1; // Price drops as credits are sold
+                updateDisplay();
+            } else {
+                alert(`${country} has no credits to sell!`);
+            }
+        }
+
+        function investTech(country) {
+            if (countries[country].cash >= 50) {
+                countries[country].cash -= 50;
+                countries[country].emissions -= 50;
+                updateDisplay();
+            } else {
+                alert(`${country} doesn't have enough cash to invest!`);
+            }
+        }
+
+        function protectForests(country) {
+            if (countries[country].cash >= 30) {
+                countries[country].cash -= 30;
+                countries[country].credits += 2;
+                countries[country].emissions -= 20;
+                updateDisplay();
+            } else {
+                alert(`${country} doesn't have enough cash to protect forests!`);
+            }
+        }
+
+        function protectResources(country) {
+            if (countries[country].cash >= 25) {
+                countries[country].cash -= 25;
+                countries[country].credits += 1;
+                countries[country].emissions -= 15;
+                updateDisplay();
+            } else {
+                alert(`${country} doesn't have enough cash to protect resources!`);
+            }
+        }
+
+        function triggerEvent() {
+            const events = [
+                { name: "New Environmental Policy", effect: () => { marketPrice -= 2; }},
+                { name: "Economic Crisis", effect: () => { marketPrice += 5; }},
+                { name: "Tech Breakthrough", effect: () => { 
+                    for (let country in countries) {
+                        countries[country].emissions -= 30;
+                    }
+                }},
+                { name: "Natural Disaster", effect: () => {
+                    for (let country in countries) {
+                        countries[country].cash -= 50;
+                    }
+                }},
+                { name: "Global Green Initiative", effect: () => {
+                    for (let country in countries) {
+                                              countries[country].credits += 5;
+                    }
+                }}
+            ];
+            const event = events[Math.floor(Math.random() * events.length)];
+            event.effect();
+            document.getElementById('lastEvent').innerText = event.name;
+            updateDisplay();
+        }
+
+        function updateChart() {
+            const traces = Object.keys(countries).map(country => ({
+                x: countries[country].history.map((_, i) => i),
+                y: countries[country].history.map(h => h.emissions),
+                mode: 'lines+markers',
+                name: country.toUpperCase()
+            }));
+
+            const layout = {
+                title: 'Emissions Over Time',
+                xaxis: { title: 'Turns' },
+                yaxis: { title: 'Emissions (tons)' },
+                height: 600,
+                margin: { l: 50, r: 50, b: 50, t: 50, pad: 4 }
+            };
+
+            Plotly.newPlot('chart', traces, layout);
+        }
+
+        function toggleTutorial() {
+            var tutorial = document.getElementById('tutorial');
+            tutorial.style.display = tutorial.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Initialize the game
+        updateDisplay();
+        // Hide the tutorial initially
+        document.getElementById('tutorial').style.display = 'none';
+    </script>
+</body>
+</html>
