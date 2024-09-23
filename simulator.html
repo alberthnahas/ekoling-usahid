@@ -14,6 +14,9 @@
         }
         .left-panel {
             width: 60%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
         .right-panel {
             width: 38%;
@@ -21,38 +24,40 @@
             top: 20px;
             align-self: flex-start;
         }
+        .market {
+            width: 100%;
+            background-color: #e8f6e8;
+            margin-bottom: 20px;
+        }
+        .country-dashboard {
+            width: 48%;
+            background-color: #e8f4f8;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
         .market, .country-dashboard {
             border: 1px solid #bdc3c7;
             border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .market {
-            background-color: #e8f6e8;
-        }
-        .country-dashboard {
-            background-color: #e8f4f8;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .country-info {
-            flex: 1;
-            min-width: 200px;
+        .country-info, .country-actions {
+            width: 100%;
         }
         .country-actions {
-            flex: 1;
-            min-width: 200px;
             display: flex;
-            flex-direction: column;
-            justify-content: space-around;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .country-actions button {
+            padding: 5px 10px;
+            font-size: 0.8em;
         }
         .flag {
-            width: 30px;
-            height: 20px;
+            width: 20px;
+            height: 13px;
             display: inline-block;
-            margin-right: 10px;
+            margin-right: 5px;
             vertical-align: middle;
         }
         #chart {
@@ -94,135 +99,117 @@
 
         <button id="showTutorial" onclick="toggleTutorial()">Show Tutorial</button>
 
-        <div id="tutorial">
-            <div id="tutorial">
-                <h2>How to Play</h2>
-                <ol>
-                    <li><strong>Objective:</strong> Manage your country's emissions while balancing economic growth and environmental responsibility.</li>
-                    <li><strong>Carbon Credits:</strong> Each credit represents the right to emit one ton of carbon dioxide.</li>
-                    <li><strong>Actions:</strong>
-                        <ul>
-                            <li><strong>Buy Credits:</strong> Purchase carbon credits from the market. This increases your emission allowance but costs money.</li>
-                            <li><strong>Sell Credits:</strong> Sell excess credits to generate income.</li>
-                            <li><strong>Invest in Technology:</strong> Reduce emissions by investing in clean technology. This costs money but lowers your emissions.</li>
-                            <li><strong>Protect Forests/Resources:</strong> Some countries can protect natural resources, generating credits and reducing emissions.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Market Dynamics:</strong> The price of carbon credits changes based on supply and demand. Buying increases the price, selling decreases it.</li>
-                    <li><strong>Random Events:</strong> Click "Trigger Random Event" to simulate global occurrences that affect the market and countries.</li>
-                    <li><strong>Strategy:</strong> Each country has unique characteristics. Adapt your strategy based on your country's strengths and weaknesses.</li>
-                    <li><strong>Monitoring:</strong> Keep an eye on the emissions chart to track your progress and compare with other countries.</li>
-                </ol>
-                <button onclick="toggleTutorial()">Start Playing</button>
-            </div>
+        <div id="tutorial" style="display: none;">
+            <h2>How to Play</h2>
+            <ol>
+                <li><strong>Objective:</strong> Manage your country's emissions while balancing economic growth and environmental responsibility.</li>
+                <li><strong>Carbon Credits:</strong> Each credit represents the right to emit one ton of carbon dioxide.</li>
+                <li><strong>Actions:</strong>
+                    <ul>
+                        <li><strong>Buy Credits:</strong> Purchase carbon credits from the market. This increases your emission allowance but costs money.</li>
+                        <li><strong>Sell Credits:</strong> Sell excess credits to generate income.</li>
+                        <li><strong>Invest in Technology:</strong> Reduce emissions by investing in clean technology. This costs money but lowers your emissions.</li>
+                        <li><strong>Protect Forests/Resources:</strong> Some countries can protect natural resources, generating credits and reducing emissions.</li>
+                    </ul>
+                </li>
+                <li><strong>Market Dynamics:</strong> The price of carbon credits changes based on supply and demand. Buying increases the price, selling decreases it.</li>
+                <li><strong>Random Events:</strong> Click "Trigger Random Event" to simulate global occurrences that affect the market and countries.</li>
+                <li><strong>Strategy:</strong> Each country has unique characteristics. Adapt your strategy based on your country's strengths and weaknesses.</li>
+                <li><strong>Monitoring:</strong> Keep an eye on the emissions chart to track your progress and compare with other countries.</li>
+            </ol>
+            <button onclick="toggleTutorial()">Start Playing</button>
         </div>
 
         <div class="game-container">
             <div class="left-panel">
                 <div id="market" class="market">
-                    <div id="market" class="market">
-                        <h2>Global Carbon Market</h2>
-                        <p>Current Price: $<span id="marketPrice">10</span> per credit</p>
-                        <button onclick="triggerEvent()">Trigger Random Event</button>
-                        <p>Last Event: <span id="lastEvent">None</span></p>
-                    </div>
+                    <h3>Global Carbon Market</h3>
+                    <p>Current Price: $<span id="marketPrice">10</span> per credit</p>
+                    <button onclick="triggerEvent()">Trigger Random Event</button>
+                    <p>Last Event: <span id="lastEvent">None</span></p>
                 </div>
 
                 <div id="usa" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/us.png') no-repeat center/cover;"></span>USA</h2>
-                        <p>Cash: $<span id="usaCash">1000</span></p>
-                        <p>Emissions: <span id="usaEmissions">500</span> tons</p>
-                        <p>Credits: <span id="usaCredits">20</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/us.png') no-repeat center/cover;"></span>USA</h3>
+                        <p>Cash: $<span id="usaCash">1000</span> | Emissions: <span id="usaEmissions">500</span> | Credits: <span id="usaCredits">20</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('usa')">Buy Credits</button>
-                        <button onclick="sellCredits('usa')">Sell Credits</button>
-                        <button onclick="investTech('usa')">Invest in Technology</button>
+                        <button onclick="buyCredits('usa')">Buy</button>
+                        <button onclick="sellCredits('usa')">Sell</button>
+                        <button onclick="investTech('usa')">Invest</button>
                     </div>
                 </div>
-    
+
                 <div id="china" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/cn.png') no-repeat center/cover;"></span>China</h2>
-                        <p>Cash: $<span id="chinaCash">1200</span></p>
-                        <p>Emissions: <span id="chinaEmissions">700</span> tons</p>
-                        <p>Credits: <span id="chinaCredits">15</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/cn.png') no-repeat center/cover;"></span>China</h3>
+                        <p>Cash: $<span id="chinaCash">1200</span> | Emissions: <span id="chinaEmissions">700</span> | Credits: <span id="chinaCredits">15</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('china')">Buy Credits</button>
-                        <button onclick="sellCredits('china')">Sell Credits</button>
-                        <button onclick="investTech('china')">Invest in Technology</button>
+                        <button onclick="buyCredits('china')">Buy</button>
+                        <button onclick="sellCredits('china')">Sell</button>
+                        <button onclick="investTech('china')">Invest</button>
                     </div>
                 </div>
-    
+
                 <div id="india" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/in.png') no-repeat center/cover;"></span>India</h2>
-                        <p>Cash: $<span id="indiaCash">600</span></p>
-                        <p>Emissions: <span id="indiaEmissions">400</span> tons</p>
-                        <p>Credits: <span id="indiaCredits">10</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/in.png') no-repeat center/cover;"></span>India</h3>
+                        <p>Cash: $<span id="indiaCash">600</span> | Emissions: <span id="indiaEmissions">400</span> | Credits: <span id="indiaCredits">10</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('india')">Buy Credits</button>
-                        <button onclick="sellCredits('india')">Sell Credits</button>
-                        <button onclick="investTech('india')">Invest in Technology</button>
+                        <button onclick="buyCredits('india')">Buy</button>
+                        <button onclick="sellCredits('india')">Sell</button>
+                        <button onclick="investTech('india')">Invest</button>
                     </div>
                 </div>
-    
+
                 <div id="germany" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/de.png') no-repeat center/cover;"></span>Germany</h2>
-                        <p>Cash: $<span id="germanyCash">800</span></p>
-                        <p>Emissions: <span id="germanyEmissions">300</span> tons</p>
-                        <p>Credits: <span id="germanyCredits">25</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/de.png') no-repeat center/cover;"></span>Germany</h3>
+                        <p>Cash: $<span id="germanyCash">800</span> | Emissions: <span id="germanyEmissions">300</span> | Credits: <span id="germanyCredits">25</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('germany')">Buy Credits</button>
-                        <button onclick="sellCredits('germany')">Sell Credits</button>
-                        <button onclick="investTech('germany')">Invest in Technology</button>
+                        <button onclick="buyCredits('germany')">Buy</button>
+                        <button onclick="sellCredits('germany')">Sell</button>
+                        <button onclick="investTech('germany')">Invest</button>
                     </div>
                 </div>
-    
+
                 <div id="brazil" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/br.png') no-repeat center/cover;"></span>Brazil</h2>
-                        <p>Cash: $<span id="brazilCash">500</span></p>
-                        <p>Emissions: <span id="brazilEmissions">250</span> tons</p>
-                        <p>Credits: <span id="brazilCredits">30</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/br.png') no-repeat center/cover;"></span>Brazil</h3>
+                        <p>Cash: $<span id="brazilCash">500</span> | Emissions: <span id="brazilEmissions">250</span> | Credits: <span id="brazilCredits">30</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('brazil')">Buy Credits</button>
-                        <button onclick="sellCredits('brazil')">Sell Credits</button>
-                        <button onclick="protectForests('brazil')">Protect Forests</button>
+                        <button onclick="buyCredits('brazil')">Buy</button>
+                        <button onclick="sellCredits('brazil')">Sell</button>
+                        <button onclick="protectForests('brazil')">Protect</button>
                     </div>
                 </div>
-    
+
                 <div id="indonesia" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/id.png') no-repeat center/cover;"></span>Indonesia</h2>
-                        <p>Cash: $<span id="indonesiaCash">400</span></p>
-                        <p>Emissions: <span id="indonesiaEmissions">200</span> tons</p>
-                        <p>Credits: <span id="indonesiaCredits">20</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/id.png') no-repeat center/cover;"></span>Indonesia</h3>
+                        <p>Cash: $<span id="indonesiaCash">400</span> | Emissions: <span id="indonesiaEmissions">200</span> | Credits: <span id="indonesiaCredits">20</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('indonesia')">Buy Credits</button>
-                        <button onclick="sellCredits('indonesia')">Sell Credits</button>
-                        <button onclick="protectResources('indonesia')">Protect Resources</button>
+                        <button onclick="buyCredits('indonesia')">Buy</button>
+                        <button onclick="sellCredits('indonesia')">Sell</button>
+                        <button onclick="protectResources('indonesia')">Protect</button>
                     </div>
                 </div>
-    
+
                 <div id="norway" class="country-dashboard">
                     <div class="country-info">
-                        <h2><span class="flag" style="background: url('https://flagcdn.com/w40/no.png') no-repeat center/cover;"></span>Norway</h2>
-                        <p>Cash: $<span id="norwayCash">900</span></p>
-                        <p>Emissions: <span id="norwayEmissions">100</span> tons</p>
-                        <p>Credits: <span id="norwayCredits">35</span></p>
+                        <h3><span class="flag" style="background: url('https://flagcdn.com/w40/no.png') no-repeat center/cover;"></span>Norway</h3>
+                        <p>Cash: $<span id="norwayCash">900</span> | Emissions: <span id="norwayEmissions">100</span> | Credits: <span id="norwayCredits">35</span></p>
                     </div>
                     <div class="country-actions">
-                        <button onclick="buyCredits('norway')">Buy Credits</button>
-                        <button onclick="sellCredits('norway')">Sell Credits</button>
-                        <button onclick="investTech('norway')">Invest in Technology</button>
+                        <button onclick="buyCredits('norway')">Buy</button>
+                        <button onclick="sellCredits('norway')">Sell</button>
+                        <button onclick="investTech('norway')">Invest</button>
                     </div>
                 </div>
             </div>
